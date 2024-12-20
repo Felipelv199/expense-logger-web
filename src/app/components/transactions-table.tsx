@@ -1,5 +1,6 @@
 import { Columns } from "@/consts";
 import {
+  Paper,
   Skeleton,
   Table,
   TableBody,
@@ -30,7 +31,7 @@ export const TransactionsTable = () => {
   }));
 
   return (
-    <TableContainer>
+    <TableContainer component={Paper}>
       <Table>
         <TableHead>
           <TableRow>

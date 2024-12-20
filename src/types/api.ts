@@ -5,3 +5,21 @@ export interface Transaction {
   id: number;
   name: string;
 }
+
+export interface CreateTransactionRequest {
+  amount: number;
+  date: Date;
+  description?: string;
+  name: string;
+  categoryId?: number;
+}
+
+export interface HelperMessage {
+  message: string;
+  type: "error" | "info";
+}
+
+export interface InputForm<T> {
+  value?: T;
+  helperMessage?: HelperMessage;
+}

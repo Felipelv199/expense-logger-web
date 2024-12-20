@@ -1,6 +1,10 @@
 export type Account = "Revolut" | "OTP";
 
-export type Category = "House" | "Grosery" | "Travel" | "Subscription";
+export interface Category {
+  id: number;
+  name: string;
+  budgetId: number;
+}
 
 export interface Friend {
   name: string;
