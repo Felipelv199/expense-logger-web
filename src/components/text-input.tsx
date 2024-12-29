@@ -1,4 +1,5 @@
-import { HelperMessage } from "@/types/api";
+import { ReactNode } from "react";
+
 import {
   FormControl,
   InputLabel,
@@ -6,28 +7,40 @@ import {
   OutlinedInput,
 } from "@mui/material";
 
+import { HelperMessage } from "@/types/api";
+
 interface Props {
   label?: string;
-  value?: string;
+  value?: unknown;
   onChangeValue: (value: string) => void;
   helperMessage?: HelperMessage;
+  startAdornment?: ReactNode;
+  multiline?: boolean;
+  rows?: number;
 }
 
-export function TextInput({
+export const TextInput = ({
   label,
   value,
   onChangeValue,
   helperMessage,
-}: Props) {
+  startAdornment,
+  multiline,
+  rows,
+}: Props) => {
+  const isError = helperMessage?.type === "error";
   return (
-    <FormControl error={helperMessage?.type === "error"}>
+    <FormControl error={isError}>
       <InputLabel>{label}</InputLabel>
       <OutlinedInput
+        startAdornment={startAdornment}
         value={value}
         onChange={(e) => onChangeValue(e.target.value)}
         label={label}
+        multiline={multiline}
+        rows={rows}
       />
-      <FormHelperText>{helperMessage?.message}</FormHelperText>
+      <FormHelperText sx={{ margin: 0 }}>{helperMessage?.message}</FormHelperText>
     </FormControl>
   );
-}
+};

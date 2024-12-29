@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import {
   Button,
   Dialog,
@@ -5,62 +7,121 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import React, { useState } from "react";
-import { CreateTransactionRequest } from "@/types/api";
-import { FormHelperMessages } from "@/app/types";
-import { CreateTransactionForm } from "./dialog-form";
+
+import { createTransaction } from "@/api/transactions";
+import { FormInputsValues, FormInputsHelperMessages } from "@/app/types";
+
+import { CreateTransactionForm } from "./create-transaction-form";
+
+
+const defaultInputsValues: FormInputsValues = {
+  date: new Date(),
+};
 
 export const CreateTransactionDialog = () => {
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState<CreateTransactionRequest>();
-  const [formHelperMessages, setFormHelperMessages] =
-    useState<FormHelperMessages>();
+  const [inputsValues, setInputsValues] =
+    useState<FormInputsValues>(defaultInputsValues);
+  const [helperMessages, setHelperMessages] =
+    useState<FormInputsHelperMessages>({});
 
   const handleOpen = () => setOpen(true);
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    clearHelperMessages();
+    clearInputsValues();
+  };
 
-  const handleSave = () => {
-    if (!form) return;
+  const handleSave = async () => {
+    clearHelperMessages();
+    const { amount, name, date, description } = inputsValues;
+    const newHelperMessages: FormInputsHelperMessages = {};
 
-    const { name } = form;
+    if (!amount) {
+      newHelperMessages.amount = {
+        message: "Amount is required",
+        type: "error",
+      };
+    }
 
-    if (!name) {
-      handleFormHelperUpdate({
-        name: { message: "Name is required", type: "error" },
-      });
+    if (amount && isNaN(Number(amount))) {
+      newHelperMessages.amount = {
+        message: "Amount should be a number",
+        type: "error",
+      };
+    }
+
+    if (!date) {
+      newHelperMessages.date = {
+        message: "Date is required",
+        type: "error",
+      };
+    }
+
+    if (!description) {
+      newHelperMessages.description = {
+        message: "Description is required",
+        type: "error",
+      };
+    }
+
+    if (!name || name === "") {
+      newHelperMessages.name = {
+        message: "Name is required",
+        type: "error",
+      };
+    }
+
+    if (
+      newHelperMessages.amount ||
+      newHelperMessages.date ||
+      newHelperMessages.description ||
+      newHelperMessages.name
+    ) {
+      setHelperMessages((prev) => ({ ...prev, ...newHelperMessages }));
       return;
     }
 
+    const { categoryId } = inputsValues;
+
+    await createTransaction({
+      amount: Number(amount),
+      categoryId,
+      date: date!,
+      name: name!,
+      description: description!,
+    });
+
     handleClose();
+    clearInputsValues();
   };
 
-  const handleFormUpdate = (form: Partial<CreateTransactionRequest>) =>
-    setForm((prev) => (prev ? { ...prev, ...form } : prev));
+  const clearInputsValues = () => setInputsValues(defaultInputsValues);
 
-  const handleFormHelperUpdate = (
-    formHelperMessages: Partial<FormHelperMessages>
-  ) =>
-    setFormHelperMessages((prev) =>
-      prev ? { ...prev, ...formHelperMessages } : prev
-    );
+  const clearHelperMessages = () => setHelperMessages({});
+
+  const updateInputsValues = (form: Partial<FormInputsValues>) => {
+    const partialFormKey = Object.keys(form)[0];
+    setHelperMessages({
+      ...helperMessages,
+      [partialFormKey]: undefined,
+    });
+    setInputsValues((prev) => (prev ? { ...prev, ...form } : prev));
+  };
 
   return (
     <>
       <Button variant="contained" onClick={handleOpen}>
         Add
       </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        PaperProps={{ sx: { p: 2 } }}
-      >
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Create Transaction</DialogTitle>
         <DialogContent>
           <CreateTransactionForm
-            form={form}
-            formHelperMessages={formHelperMessages}
-            onChange={handleFormUpdate}
+            form={inputsValues}
+            formHelperMessages={helperMessages}
+            onChange={updateInputsValues}
           />
         </DialogContent>
         <DialogActions>

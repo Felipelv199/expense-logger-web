@@ -1,8 +1,9 @@
 "use client";
 
 import { Container, Stack, Typography } from "@mui/material";
-import { TransactionsTable } from "./components/transactions-table";
+
 import { CreateTransactionDialog } from "./components/create-transaction-dialog";
+import { TransactionsTable } from "./components/transactions-table";
 
 export default function Home() {
   return (

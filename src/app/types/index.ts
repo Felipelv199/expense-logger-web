@@ -1,22 +1,23 @@
 import { HelperMessage } from "@/types/api";
 
-export type TransactionColumnsIds = "amount" | "name" | "date";
+export type TransactionColumnsIds = "amount" | "name" | "date" | "id";
 
 export interface TableColumn {
   id: TransactionColumnsIds;
   value: string;
 }
 
-export interface Form {
-  amount: number;
-  date: Date;
+export interface FormInputsValues {
+  amount?: string;
+  date?: Date;
   description?: string;
-  name: string;
+  name?: string;
   categoryId?: number;
 }
 
-export interface FormHelperMessages {
-  name: HelperMessage;
-  amount: HelperMessage;
-  date: HelperMessage;
+export interface FormInputsHelperMessages {
+  name?: HelperMessage;
+  amount?: HelperMessage;
+  date?: HelperMessage;
+  description?: HelperMessage;
 }

@@ -1,9 +1,10 @@
 "use client";
 
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
-import Header from "./components/header";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
+import Header from "./components/header";
 
 export default function RootLayout({
   children,

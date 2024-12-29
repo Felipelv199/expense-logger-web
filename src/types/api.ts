@@ -9,7 +9,7 @@ export interface Transaction {
 export interface CreateTransactionRequest {
   amount: number;
   date: Date;
-  description?: string;
+  description: string;
   name: string;
   categoryId?: number;
 }
@@ -22,4 +22,10 @@ export interface HelperMessage {
 export interface InputForm<T> {
   value?: T;
   helperMessage?: HelperMessage;
+}
+
+export interface CreateCategoryRequest {
+  amount?: string;
+  budgetId?: number;
+  name: string;
 }
