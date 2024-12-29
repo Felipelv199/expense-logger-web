@@ -48,6 +48,7 @@ export const TransactionsTable = () => {
           {rows.map((row) => (
             <TableRow key={row.id.toString()}>
               {Object.keys(row).map((key) => {
+                if (key === "id") return null;
                 const columnId = key as TransactionColumnsIds;
                 return <TableCell key={key}>{`${row[columnId]}`}</TableCell>;
               })}
