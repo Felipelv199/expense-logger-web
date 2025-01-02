@@ -11,11 +11,12 @@ import {
   TableRow,
 } from "@mui/material";
 
+import { useFetchTransactions } from "@/app/transactions/hooks/useFetchTransactions";
+import { TransactionRow } from "@/app/transactions/types";
 import { Columns } from "@/consts";
+import { mapTransactionToTransactionRow } from "@/mappers/transactionMapper";
 
-import { useFetchTransactions } from "../hooks/useFetchTransactions";
-import { TransactionColumnsIds } from "../types";
-import { getShortDate } from "../utils/date";
+import { TransactionsTableRow } from "./transactions-table-row";
 
 export const TransactionsTable = () => {
   const { transactions } = useFetchTransactions();
@@ -25,14 +26,7 @@ export const TransactionsTable = () => {
     return <Skeleton height={"50vh"} />;
   }
 
-  const rows = transactions.map<
-    Record<TransactionColumnsIds, Date | number | string>
-  >((t) => ({
-    amount: t.amount,
-    date: getShortDate(t.date),
-    name: t.name,
-    id: t.id
-  }));
+  const rows = transactions.map<TransactionRow>(mapTransactionToTransactionRow);
 
   return (
     <TableContainer component={Paper}>
@@ -46,13 +40,7 @@ export const TransactionsTable = () => {
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <TableRow key={row.id.toString()}>
-              {Object.keys(row).map((key) => {
-                if (key === "id") return null;
-                const columnId = key as TransactionColumnsIds;
-                return <TableCell key={key}>{`${row[columnId]}`}</TableCell>;
-              })}
-            </TableRow>
+            <TransactionsTableRow key={row.id as string} row={row} />
           ))}
         </TableBody>
       </Table>

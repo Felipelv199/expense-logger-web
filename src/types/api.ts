@@ -1,16 +1,24 @@
+export interface Category {
+  id: number;
+  amount?: string;
+  name: string;
+  budgetId?: number;
+}
+
 export interface Transaction {
   amount: number;
-  date: Date;
-  description: string;
-  id: number;
   name: string;
+  description?: string;
+  date: Date;
+  id: number;
+  category?: Category;
 }
 
 export interface CreateTransactionRequest {
   amount: number;
-  date: Date;
-  description: string;
   name: string;
+  description?: string;
+  date: string;
   categoryId?: number;
 }
 

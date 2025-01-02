@@ -5,11 +5,11 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
 import { fetchAllCategories } from "@/api/categories";
-import { FormInputsValues, FormInputsHelperMessages } from "@/app/types";
-import { TextInput } from "@/components/text-input";
-import { Category } from "@/types";
+import { FormInputsValues, FormInputsHelperMessages } from "@/app/transactions/types";
+import { Category } from "@/types/api";
 
-import { CategoriesSelect, Option } from "./categories-autocomplete";
+import { AutocompleteTextField, Option } from "./autocomplete-text-field";
+import { TextInput } from "./text-input";
 
 interface Props {
   form: FormInputsValues;
@@ -76,7 +76,7 @@ export const CreateTransactionForm = ({
         onChangeValue={(value) => onChange({ description: value })}
         helperMessage={formHelperMessages?.description}
       />
-      <CategoriesSelect
+      <AutocompleteTextField
         options={categories.map(_mapCategoryToOption)}
         onChangeSelection={(option) =>
           onChange({

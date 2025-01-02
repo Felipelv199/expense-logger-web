@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 
 import { createCategory } from "@/api/categories";
-import { Category } from "@/types";
+import { Category } from "@/types/api";
 
 export interface Option {
   value: string;
@@ -25,7 +25,7 @@ interface Props {
 
 const filterOptions = createFilterOptions<Option>();
 
-export const CategoriesSelect = ({
+export const AutocompleteTextField = ({
   options,
   onChangeSelection,
   refreshOptions,
@@ -46,14 +46,15 @@ export const CategoriesSelect = ({
     event: SyntheticEvent,
     value: string | Option | null
   ) => {
-    const valueExists = Boolean(value) && value !== null;
-    const isString = typeof value === "string";
-    const option = isString && options.find((o) => o.text === value);
-    const isOption = valueExists && typeof value === "object";
-    const isOptionWithInputValue = isOption && value.inputValue !== undefined;
-    const isNewOption = valueExists && (isOptionWithInputValue || !option);
+    if (value === null) {
+      onChangeSelection(undefined);
+      return;
+    }
 
-    if (isNewOption) {
+    const isValueObject = typeof value === "object";
+    const isValueString = typeof value === "string";
+
+    if (isValueObject && value.inputValue) {
       const category = await _handleCreateCategory(value);
       await refreshOptions();
       onChangeSelection(
@@ -61,10 +62,10 @@ export const CategoriesSelect = ({
           ? { value: category.id.toString(), text: category.name }
           : undefined
       );
-    } else if (isString) {
+    } else if (isValueString) {
       onChangeSelection(options.find((o) => o.text === value));
     } else {
-      onChangeSelection(value ?? undefined);
+      onChangeSelection(value);
     }
   };
 

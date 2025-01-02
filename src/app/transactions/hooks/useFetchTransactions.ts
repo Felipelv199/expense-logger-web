@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { fetchAllTransactions } from "@/api/transactions";
-import { Transaction } from "@/types";
+import { Transaction } from "@/types/api";
 
 export const useFetchTransactions = () => {
   const [transactions, setTransactions] = useState<Transaction[]>();

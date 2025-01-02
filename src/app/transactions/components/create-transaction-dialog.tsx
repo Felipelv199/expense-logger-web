@@ -9,10 +9,10 @@ import {
 } from "@mui/material";
 
 import { createTransaction } from "@/api/transactions";
-import { FormInputsValues, FormInputsHelperMessages } from "@/app/types";
+import { FormInputsValues, FormInputsHelperMessages } from "@/app/transactions/types";
+import { mapFormInputsValuesToCreateTransactionRequest } from "@/mappers/transactionMapper";
 
 import { CreateTransactionForm } from "./create-transaction-form";
-
 
 const defaultInputsValues: FormInputsValues = {
   date: new Date(),
@@ -83,16 +83,9 @@ export const CreateTransactionDialog = () => {
       return;
     }
 
-    const { categoryId } = inputsValues;
-
-    await createTransaction({
-      amount: Number(amount),
-      categoryId,
-      date: date!,
-      name: name!,
-      description: description!,
-    });
-
+    const createTransactionRequest =
+      mapFormInputsValuesToCreateTransactionRequest(inputsValues);
+    await createTransaction(createTransactionRequest);
     handleClose();
     clearInputsValues();
   };

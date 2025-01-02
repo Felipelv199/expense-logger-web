@@ -1,6 +1,15 @@
 import { HelperMessage } from "@/types/api";
 
-export type TransactionColumnsIds = "amount" | "name" | "date" | "id";
+export type TransactionColumnsIds =
+  | "amount"
+  | "name"
+  | "date"
+  | "id"
+  | "category";
+
+export type TransactionRowValue = Date | number | string | undefined;
+
+export type TransactionRow = Record<TransactionColumnsIds, TransactionRowValue>;
 
 export interface TableColumn {
   id: TransactionColumnsIds;

@@ -1,5 +1,4 @@
-import { Category } from "@/types";
-import { CreateCategoryRequest } from "@/types/api";
+import { Category, CreateCategoryRequest } from "@/types/api";
 
 const API_DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN as string;
 
