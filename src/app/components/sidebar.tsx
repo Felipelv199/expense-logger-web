@@ -2,7 +2,7 @@ import React from "react";
 
 import {
   ChevronLeft as ChevronLeftIcon,
-  Menu as MenuIcon,
+  ChevronRight as ChevronRightIcon,
 } from "@mui/icons-material";
 import { Divider, Drawer, List, Toolbar } from "@mui/material";
 import { useRouter, usePathname } from "next/navigation";
@@ -43,7 +43,7 @@ export default function Sidebar({
       <List disablePadding sx={{ width: "100%" }}>
         <SidebarListItem
           shrink={!open}
-          icon={open ? <ChevronLeftIcon /> : <MenuIcon />}
+          icon={open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           onClick={() => (open ? onClose() : onOpen())}
         />
       </List>
