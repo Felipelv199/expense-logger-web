@@ -1,8 +1,8 @@
 import React from "react";
 
 import {
-  ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
+  ChevronLeftOutlined as ChevronLeftIcon,
+  ChevronRightOutlined as ChevronRightIcon,
 } from "@mui/icons-material";
 import { Divider, Drawer, List, Toolbar } from "@mui/material";
 import { useRouter, usePathname } from "next/navigation";
