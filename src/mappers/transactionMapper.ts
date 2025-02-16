@@ -1,9 +1,8 @@
-import { FormInputsValues, TransactionRow } from "@/app/transactions/types";
 import { CreateTransactionRequest, Transaction } from "@/types/api";
-import { getShortDate } from "@/utils/date";
+import { FormInputsValues, TransactionRow } from "@/types/transactions";
 
 export const mapFormInputsValuesToCreateTransactionRequest = (
-  formInputsValues: FormInputsValues
+  formInputsValues: FormInputsValues,
 ): CreateTransactionRequest => ({
   amount: Number(formInputsValues.amount!),
   date: formInputsValues.date!.toString(),
@@ -13,11 +12,12 @@ export const mapFormInputsValuesToCreateTransactionRequest = (
 });
 
 export const mapTransactionToTransactionRow = (
-  transaction: Transaction
+  transaction: Transaction,
 ): TransactionRow => ({
-  amount: transaction.amount,
-  date: getShortDate(transaction.date),
+  amount: transaction.amount.toString(),
+  date: new Date(transaction.date).toLocaleDateString(),
   name: transaction.name,
-  id: transaction.id,
-  category: transaction.category?.name,
+  id: transaction.id.toString(),
+  category: transaction.category?.name ?? "",
+  rowActions: undefined,
 });

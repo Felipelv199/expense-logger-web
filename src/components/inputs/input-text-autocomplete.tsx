@@ -25,14 +25,14 @@ interface Props {
 
 const filterOptions = createFilterOptions<Option>();
 
-export const AutocompleteTextField = ({
+export const InputTextAutocomplete = ({
   options,
   onChangeSelection,
   refreshOptions,
   selectedOption,
 }: Props) => {
   const _handleCreateCategory = async (
-    option: Option | string
+    option: Option | string,
   ): Promise<Category | undefined> => {
     const inputValue = typeof option === "string" ? option : option.inputValue;
 
@@ -44,7 +44,7 @@ export const AutocompleteTextField = ({
 
   const handleOnChange = async (
     event: SyntheticEvent,
-    value: string | Option | null
+    value: string | Option | null,
   ) => {
     if (value === null) {
       onChangeSelection(undefined);
@@ -60,7 +60,7 @@ export const AutocompleteTextField = ({
       onChangeSelection(
         category
           ? { value: category.id.toString(), text: category.name }
-          : undefined
+          : undefined,
       );
     } else if (isValueString) {
       onChangeSelection(options.find((o) => o.text === value));
@@ -71,7 +71,7 @@ export const AutocompleteTextField = ({
 
   const getFilterOptions = (
     options: Option[],
-    params: FilterOptionsState<Option>
+    params: FilterOptionsState<Option>,
   ) => {
     const filtered = filterOptions(options, params);
     const { inputValue } = params;

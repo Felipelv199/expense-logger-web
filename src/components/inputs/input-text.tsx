@@ -19,7 +19,7 @@ interface Props {
   rows?: number;
 }
 
-export const TextInput = ({
+export default function InputText({
   label,
   value,
   onChangeValue,
@@ -27,7 +27,7 @@ export const TextInput = ({
   startAdornment,
   multiline,
   rows,
-}: Props) => {
+}: Readonly<Props>) {
   const isError = helperMessage?.type === "error";
   return (
     <FormControl error={isError}>
@@ -40,7 +40,9 @@ export const TextInput = ({
         multiline={multiline}
         rows={rows}
       />
-      <FormHelperText sx={{ margin: 0 }}>{helperMessage?.message}</FormHelperText>
+      <FormHelperText sx={{ margin: 0 }}>
+        {helperMessage?.message}
+      </FormHelperText>
     </FormControl>
   );
-};
+}

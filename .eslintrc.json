@@ -1,6 +1,13 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"],
+  "plugins": ["prettier", "@tanstack/query"],
+  "extends": [
+    "prettier",
+    "next/core-web-vitals",
+    "next/typescript",
+    "plugin:@tanstack/eslint-plugin-query/recommended"
+  ],
   "rules": {
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "prefer-const": "error",
     "func-style": ["error", "expression"],
     "import/order": [

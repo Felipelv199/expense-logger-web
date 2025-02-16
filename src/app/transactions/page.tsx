@@ -2,15 +2,17 @@
 
 import { Stack, Typography } from "@mui/material";
 
-import { CreateTransactionDialog } from "./components/create-transaction-dialog";
-import { TransactionsTable } from "./components/transactions-table";
+import CreateTransactionButton from "@/components/transactions/create-transaction-button";
+import TransactionsTable from "@/components/transactions/transactions-table";
 
-export default function Transactions() {
+export default function TransactionsPage() {
   return (
-    <Stack gap={4}>
-      <Typography variant="h4">Transactions</Typography>
+    <Stack gap={2}>
       <Stack direction="row" justifyContent="flex-end">
-        <CreateTransactionDialog />
+        <Typography variant="h4">Transactions</Typography>
+        <Stack direction="row" flexGrow={1} justifyContent="flex-end">
+          <CreateTransactionButton />
+        </Stack>
       </Stack>
       <TransactionsTable />
     </Stack>

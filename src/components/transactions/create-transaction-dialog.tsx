@@ -9,28 +9,35 @@ import {
 } from "@mui/material";
 
 import { createTransaction } from "@/api/transactions";
-import { FormInputsValues, FormInputsHelperMessages } from "@/app/transactions/types";
+import {
+  FormInputsValues,
+  FormInputsHelperMessages,
+} from "@/app/transactions/types";
+import CreateTransactionForm from "@/components/transactions/create-transaction-form";
 import { mapFormInputsValuesToCreateTransactionRequest } from "@/mappers/transactionMapper";
-
-import { CreateTransactionForm } from "./create-transaction-form";
 
 const defaultInputsValues: FormInputsValues = {
   date: new Date(),
 };
 
-export const CreateTransactionDialog = () => {
-  const [open, setOpen] = useState(false);
+interface Props {
+  open: boolean;
+  onClose: () => void;
+}
+
+export default function CreateTransactionDialog({
+  open,
+  onClose,
+}: Readonly<Props>) {
   const [inputsValues, setInputsValues] =
     useState<FormInputsValues>(defaultInputsValues);
   const [helperMessages, setHelperMessages] =
     useState<FormInputsHelperMessages>({});
 
-  const handleOpen = () => setOpen(true);
-
   const handleClose = () => {
-    setOpen(false);
     clearHelperMessages();
     clearInputsValues();
+    onClose();
   };
 
   const handleSave = async () => {
@@ -104,28 +111,23 @@ export const CreateTransactionDialog = () => {
   };
 
   return (
-    <>
-      <Button variant="contained" onClick={handleOpen}>
-        Add
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Create Transaction</DialogTitle>
-        <DialogContent>
-          <CreateTransactionForm
-            form={inputsValues}
-            formHelperMessages={helperMessages}
-            onChange={updateInputsValues}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} variant="contained">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>Create Transaction</DialogTitle>
+      <DialogContent>
+        <CreateTransactionForm
+          form={inputsValues}
+          formHelperMessages={helperMessages}
+          onChange={updateInputsValues}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={handleClose}>
+          Cancel
+        </Button>
+        <Button onClick={handleSave} variant="contained">
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
-};
+}
