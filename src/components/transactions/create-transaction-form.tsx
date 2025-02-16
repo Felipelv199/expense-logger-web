@@ -5,11 +5,17 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
 import { fetchAllCategories } from "@/api/categories";
-import { FormInputsValues, FormInputsHelperMessages } from "@/app/transactions/types";
+import {
+  FormInputsHelperMessages,
+  FormInputsValues,
+} from "@/app/transactions/types";
 import { Category } from "@/types/api";
 
-import { AutocompleteTextField, Option } from "./autocomplete-text-field";
-import { TextInput } from "./text-input";
+import InputText from "../inputs/input-text";
+import {
+  InputTextAutocomplete,
+  Option,
+} from "../inputs/input-text-autocomplete";
 
 interface Props {
   form: FormInputsValues;
@@ -17,11 +23,11 @@ interface Props {
   onChange: (form: Partial<FormInputsValues>) => void;
 }
 
-export const CreateTransactionForm = ({
+export default function CreateTransactionForm({
   form,
   formHelperMessages,
   onChange,
-}: Props) => {
+}: Readonly<Props>) {
   const [categories, setCategories] = useState<Category[]>([]);
 
   const _mapCategoryToOption = (category: Category): Option => ({
@@ -55,20 +61,20 @@ export const CreateTransactionForm = ({
         value={dayjs(form.date)}
         onChange={(value) => onChange({ date: value?.toDate() })}
       />
-      <TextInput
+      <InputText
         label="Amount"
         startAdornment={<InputAdornment position="start">$</InputAdornment>}
         value={form.amount}
         onChangeValue={(value) => onChange({ amount: value })}
         helperMessage={formHelperMessages?.amount}
       />
-      <TextInput
+      <InputText
         label="Name"
         value={form.name}
         onChangeValue={(value) => onChange({ name: value })}
         helperMessage={formHelperMessages?.name}
       />
-      <TextInput
+      <InputText
         label="Description"
         multiline
         rows={4}
@@ -76,7 +82,7 @@ export const CreateTransactionForm = ({
         onChangeValue={(value) => onChange({ description: value })}
         helperMessage={formHelperMessages?.description}
       />
-      <AutocompleteTextField
+      <InputTextAutocomplete
         options={categories.map(_mapCategoryToOption)}
         onChangeSelection={(option) =>
           onChange({
@@ -88,4 +94,4 @@ export const CreateTransactionForm = ({
       />
     </Stack>
   );
-};
+}

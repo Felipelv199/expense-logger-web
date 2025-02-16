@@ -8,7 +8,7 @@ export const fetchAllCategories = async (): Promise<Category[]> => {
 };
 
 export const createCategory = async (
-  request: CreateCategoryRequest
+  request: CreateCategoryRequest,
 ): Promise<Category> => {
   const response = await fetch(`${API_DOMAIN}/categories`, {
     method: "POST",

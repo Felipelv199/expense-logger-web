@@ -1,5 +1,11 @@
-import React from "react";
+"use client";
+
+import { useRouter } from "next/navigation";
 
 export default function Page() {
-  return <div>Expense Logger</div>;
+  const router = useRouter();
+
+  router.push("/transactions");
+
+  return null;
 }

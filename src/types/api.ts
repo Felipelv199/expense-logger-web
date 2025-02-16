@@ -9,7 +9,7 @@ export interface Transaction {
   amount: number;
   name: string;
   description?: string;
-  date: Date;
+  date: string;
   id: number;
   category?: Category;
 }
@@ -37,3 +37,16 @@ export interface CreateCategoryRequest {
   budgetId?: number;
   name: string;
 }
+
+export interface PageResponsePagination {
+  page: number;
+  pageSize: PageSize;
+  total: number;
+  totalPages: number;
+}
+
+export interface PageResponse<T> extends PageResponsePagination {
+  data: T[];
+}
+
+export type PageSize = 10 | 25 | 50 | 100;
