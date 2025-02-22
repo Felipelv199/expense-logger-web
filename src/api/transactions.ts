@@ -1,5 +1,6 @@
 import {
   CreateTransactionRequest,
+  GetTransactionsParams,
   PageResponse,
   Transaction,
 } from "@/types/api";
@@ -7,11 +8,14 @@ import {
 const API_DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN as string;
 
 export const fetchByPageTransactions = async (
-  page: number,
-  pageSize: number,
+  { page, pageSize }: GetTransactionsParams,
+  signal?: AbortSignal,
 ): Promise<PageResponse<Transaction>> => {
   const response = await fetch(
     `${API_DOMAIN}/transactions?page=${page}&pageSize=${pageSize}`,
+    {
+      signal,
+    },
   );
   return response.json();
 };

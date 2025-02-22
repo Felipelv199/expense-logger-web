@@ -1,5 +1,11 @@
+import { formatCurrency } from "@/helpers/formatters";
+import { TableRow } from "@/types";
 import { CreateTransactionRequest, Transaction } from "@/types/api";
-import { FormInputsValues, TransactionRow } from "@/types/transactions";
+import {
+  FormInputsValues,
+  RowAction,
+  TransactionColumnId,
+} from "@/types/transactions";
 
 export const mapFormInputsValuesToCreateTransactionRequest = (
   formInputsValues: FormInputsValues,
@@ -11,13 +17,27 @@ export const mapFormInputsValuesToCreateTransactionRequest = (
   description: formInputsValues.description,
 });
 
-export const mapTransactionToTransactionRow = (
+export const mapTransactionToTableRow = (
   transaction: Transaction,
-): TransactionRow => ({
-  amount: transaction.amount.toString(),
-  date: new Date(transaction.date).toLocaleDateString(),
-  name: transaction.name,
+  rowActions: RowAction[],
+): TableRow<TransactionColumnId> => ({
+  amount: {
+    id: "amount",
+    value: formatCurrency(transaction.amount),
+    align: "right",
+  },
+  date: {
+    id: "date",
+    value: new Date(transaction.date).toLocaleDateString(),
+  },
+  name: {
+    id: "name",
+    value: transaction.name,
+  },
   id: transaction.id.toString(),
-  category: transaction.category?.name ?? "",
-  rowActions: undefined,
+  category: {
+    id: "category",
+    value: transaction.category?.name ?? "",
+  },
+  rowActions,
 });

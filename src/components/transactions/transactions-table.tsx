@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { Edit as EditIcon } from "@mui/icons-material";
 import {
@@ -6,89 +6,90 @@ import {
   Skeleton,
   Table,
   TableContainer,
+  TableFooter,
   TablePagination,
+  TableRow,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 
-import { fetchByPageTransactions } from "@/api/transactions";
 import { TransactionsTableBody } from "@/components/transactions/transactions-table-body";
 import { TransactionsTableHead } from "@/components/transactions/transactions-table-head";
-import { Columns } from "@/consts/transactions";
-import { mapTransactionToTransactionRow } from "@/mappers/transactionMapper";
-import { PageSize, Transaction } from "@/types/api";
-import { TransactionRow } from "@/types/transactions";
+import { TransactionColumns } from "@/consts/transactions";
+import { mapTransactionToTableRow } from "@/mappers/transactionMapper";
+import { PageSize } from "@/types";
+import { Transaction } from "@/types/api";
+import { Pagination, RowAction } from "@/types/transactions";
 
 import EditTransactionDialog from "./edit-transaction-dialog";
 
-interface Pagination {
-  page: number;
-  pageSize: PageSize;
-  total: number;
+interface Props {
+  isLoading: boolean;
+  transactions: Transaction[];
+  onPaginationChange: (pagination: Pagination) => void;
+  pagination: Pagination;
 }
 
-export default function TransactionsTable() {
-  const [pagination, setPagination] = useState<Pagination>({
-    page: 1,
-    pageSize: 10,
-    total: 0,
-  });
-
-  const { data: transactions } = useQuery({
-    queryKey: ["transactions", pagination.page, pagination.pageSize],
-    queryFn: () =>
-      fetchByPageTransactions(pagination.page, pagination.pageSize),
-    placeholderData: (previousData) => previousData,
-  });
-
+export default function TransactionsTable({
+  isLoading,
+  transactions,
+  onPaginationChange,
+  pagination,
+}: Readonly<Props>) {
   const [isOpenEditDialog, setIsOpenEditDialog] = useState<boolean>(false);
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction>();
 
-  const isSkeleton = !transactions;
-
-  if (isSkeleton) {
-    return <Skeleton height={"50vh"} />;
-  }
-
-  const _getRow = (transaction: Transaction) => {
-    const row = mapTransactionToTransactionRow(transaction);
-    row.rowActions = [
-      {
-        icon: <EditIcon />,
-        onClick: (rowId: string) => {
-          setSelectedTransaction(
-            transactions.data.find((t) => t.id === Number(rowId)),
-          );
-          setIsOpenEditDialog(true);
-        },
+  const rowActions: RowAction[] = [
+    {
+      icon: <EditIcon />,
+      onClick: (rowId: string) => {
+        setSelectedTransaction(
+          transactions.find((t) => t.id === Number(rowId)),
+        );
+        setIsOpenEditDialog(true);
       },
-    ];
-    return row;
-  };
+    },
+  ];
 
-  const rows = transactions.data.map<TransactionRow>(_getRow);
+  const rows = transactions.map((transaction) =>
+    mapTransactionToTableRow(transaction, rowActions),
+  );
+
+  if (isLoading) {
+    return <Skeleton />;
+  }
 
   return (
     <>
       <TableContainer component={Paper}>
         <Table size="small">
-          <TransactionsTableHead columns={Columns} />
-          <TransactionsTableBody rows={rows} />
+          <TransactionsTableHead
+            columns={TransactionColumns}
+            hasRowActions={true}
+          />
+          <TransactionsTableBody columns={TransactionColumns} rows={rows} />
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                count={pagination.total}
+                page={pagination.page - 1}
+                rowsPerPage={pagination.pageSize}
+                onPageChange={(event, value) => {
+                  onPaginationChange({
+                    ...pagination,
+                    page: value + 1,
+                  });
+                }}
+                onRowsPerPageChange={(event) => {
+                  const pageSize = Number(event.target.value);
+                  onPaginationChange({
+                    ...pagination,
+                    pageSize: pageSize as PageSize,
+                  });
+                }}
+              />
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
-      <TablePagination
-        count={transactions.total}
-        page={transactions.page - 1}
-        rowsPerPage={transactions.pageSize}
-        onPageChange={(event, value) => {
-          setPagination({ ...pagination, page: value + 1 });
-        }}
-        onRowsPerPageChange={(event) => {
-          setPagination({
-            ...pagination,
-            pageSize: Number(event.target.value) as PageSize,
-          });
-        }}
-      />
       <EditTransactionDialog
         isOpen={isOpenEditDialog}
         transaction={selectedTransaction}

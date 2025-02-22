@@ -1,20 +1,23 @@
 import { TableCell, TableHead, TableRow } from "@mui/material";
 
-import { TransactionColumnNames } from "@/types/transactions";
+import { TableColumns } from "@/types";
+import { TransactionColumnId } from "@/types/transactions";
 
 interface Props {
-  columns: TransactionColumnNames;
+  columns: TableColumns<TransactionColumnId>;
+  hasRowActions?: boolean;
 }
 
-export const TransactionsTableHead = ({ columns }: Props) => {
+export const TransactionsTableHead = ({ columns, hasRowActions }: Props) => {
   return (
     <TableHead>
       <TableRow>
-        {Object.keys(columns).map((column) => (
-          <TableCell variant="head" key={column}>
-            {column}
+        {columns.map((column) => (
+          <TableCell variant="head" key={column.id}>
+            {column.name}
           </TableCell>
         ))}
+        {hasRowActions && <TableCell variant="head" />}
       </TableRow>
     </TableHead>
   );

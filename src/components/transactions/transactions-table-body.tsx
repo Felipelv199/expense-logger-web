@@ -1,12 +1,14 @@
 import { IconButton, TableBody, TableCell, TableRow } from "@mui/material";
 
-import { RowAction, TransactionRow } from "../../app/transactions/types";
+import { TableColumns, TableRow as TableRowType } from "@/types";
+import { RowAction, TransactionColumnId } from "@/types/transactions";
 
 interface Props {
-  rows: TransactionRow[];
+  columns: TableColumns<TransactionColumnId>;
+  rows: TableRowType<TransactionColumnId>[];
 }
 
-export const TransactionsTableBody = ({ rows }: Props) => {
+export const TransactionsTableBody = ({ columns, rows }: Props) => {
   const _getRowActionsCell = (rowActions: RowAction[], rowId: string) => {
     return (
       <TableCell align="right">
@@ -27,14 +29,15 @@ export const TransactionsTableBody = ({ rows }: Props) => {
     <TableBody>
       {rows.map((row) => (
         <TableRow key={row.id}>
-          {Object.keys(row).map((key, index) => {
-            const value = Object.values(row)[index];
-            if (typeof value === "string") {
-              return <TableCell key={key}>{value}</TableCell>;
-            }
-
-            return _getRowActionsCell(value, row.id);
-          })}
+          {columns.map((column) => (
+            <TableCell
+              key={`${row.id}-${column.id}`}
+              align={row[column.id].align}
+            >
+              {row[column.id].value}
+            </TableCell>
+          ))}
+          {row.rowActions && _getRowActionsCell(row.rowActions, row.id)}
         </TableRow>
       ))}
     </TableBody>

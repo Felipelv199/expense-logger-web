@@ -1,8 +1,9 @@
-import { TransactionColumnNames } from "@/types/transactions";
+import { TableColumns } from "@/types";
+import { TransactionColumnId } from "@/types/transactions";
 
-export const Columns: TransactionColumnNames = {
-  date: "Date",
-  amount: "Amount",
-  name: "Name",
-  category: "Category",
-};
+export const TransactionColumns: Readonly<TableColumns<TransactionColumnId>> = [
+  { id: "date", name: "Date" },
+  { id: "name", name: "Name" },
+  { id: "category", name: "Category" },
+  { id: "amount", name: "Amount" },
+];

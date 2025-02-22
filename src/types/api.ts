@@ -1,3 +1,5 @@
+import { HelperMessage, PageSize } from "@/types";
+
 export interface Category {
   id: number;
   amount?: string;
@@ -22,11 +24,6 @@ export interface CreateTransactionRequest {
   categoryId?: number;
 }
 
-export interface HelperMessage {
-  message: string;
-  type: "error" | "info";
-}
-
 export interface InputForm<T> {
   value?: T;
   helperMessage?: HelperMessage;
@@ -49,4 +46,7 @@ export interface PageResponse<T> extends PageResponsePagination {
   data: T[];
 }
 
-export type PageSize = 10 | 25 | 50 | 100;
+export interface GetTransactionsParams {
+  page: number;
+  pageSize: number;
+}

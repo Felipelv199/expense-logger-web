@@ -1,30 +1,11 @@
-import { HelperMessage } from "@/types/api";
+import { HelperMessage, PageSize } from "@/types";
 
 export type RowAction = {
   icon: React.ReactNode;
   onClick: (rowId: string) => void;
 };
 
-export type TransactionColumnsConfig = {
-  amount: number;
-  name: string;
-  date: Date;
-  category: string;
-};
-
-export type TransactionColumnsIds = keyof TransactionColumnsConfig;
-
-export type TransactionColumnNames = { [k in TransactionColumnsIds]: string };
-
-export type TransactionRowValue =
-  TransactionColumnsConfig[TransactionColumnsIds];
-
-export type TransactionRow = {
-  [K in TransactionColumnsIds]: string;
-} & {
-  rowActions?: RowAction[];
-  id: string;
-};
+export type TransactionColumnId = "date" | "amount" | "name" | "category";
 
 export interface FormInputsValues {
   amount?: string;
@@ -39,4 +20,10 @@ export interface FormInputsHelperMessages {
   amount?: HelperMessage;
   date?: HelperMessage;
   description?: HelperMessage;
+}
+
+export interface Pagination {
+  page: number;
+  pageSize: PageSize;
+  total: number;
 }

@@ -10,11 +10,10 @@ import {
 
 import CreateTransactionForm from "@/components/transactions/create-transaction-form";
 import { Transaction } from "@/types/api";
-
 import {
   FormInputsHelperMessages,
   FormInputsValues,
-} from "../../app/transactions/types";
+} from "@/types/transactions";
 
 interface Props {
   isOpen: boolean;
@@ -32,17 +31,17 @@ export default function EditTransactionDialog({
     useState<FormInputsHelperMessages>({});
 
   const handleOnClose = () => {
+    onClose();
     setFormHelperMessages({});
     setForm({});
-    onClose();
   };
 
   const onChange = (form: Partial<FormInputsValues>) => {
-    setForm((prev) => ({ ...prev, ...form }));
+    setForm((prev: FormInputsValues) => ({ ...prev, ...form }));
   };
 
   useEffect(() => {
-    if (transaction !== undefined) {
+    if (isOpen && transaction !== undefined) {
       setForm({
         amount: transaction.amount.toString(),
         date: new Date(transaction.date),
@@ -51,7 +50,7 @@ export default function EditTransactionDialog({
         categoryId: transaction.category?.id,
       });
     }
-  }, [transaction]);
+  }, [isOpen, transaction]);
 
   return (
     <Dialog open={isOpen} onClose={onClose}>

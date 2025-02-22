@@ -5,11 +5,11 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
 import { fetchAllCategories } from "@/api/categories";
+import { Category } from "@/types/api";
 import {
   FormInputsHelperMessages,
   FormInputsValues,
-} from "@/app/transactions/types";
-import { Category } from "@/types/api";
+} from "@/types/transactions";
 
 import InputText from "../inputs/input-text";
 import {
